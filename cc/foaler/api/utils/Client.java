@@ -1,6 +1,6 @@
-package cc.foaler.apiclient.utils;
+package cc.foaler.api.utils;
 
 public interface Client {
-    void onEnable();
-    void onDisable();
+    void start();
+    void stop();
 }

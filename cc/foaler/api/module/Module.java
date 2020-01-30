@@ -1,6 +1,9 @@
 package cc.foaler.api.module;
 
-import cc.foaler.api.ClientAPI;
+import cc.foaler.api.API;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Module {
 
@@ -11,6 +14,8 @@ public abstract class Module {
     private boolean show;
 
     private boolean state;
+    public Mode mode;
+    private List<Mode> modes = new ArrayList<>();
 
     public Module(String name, String description, Category category, int bind, boolean show) {
         this.name = name;
@@ -32,22 +37,64 @@ public abstract class Module {
 
     }
 
+    public void init() {
+
+    }
+
     public boolean isEnabled() {
         return state;
     }
 
     public void setEnabled(boolean state) {
         if(state) {
-            this.state = true;
-            onEnable();
+            if(mode != null) {
+                this.state = true;
+                mode.onEnable();
 
-            ClientAPI.getInstance().getEventManager().register(this);
+                API.getInstance().getEventManager().register(mode);
+            } else {
+                this.state = true;
+                onEnable();
+
+                API.getInstance().getEventManager().register(this);
+            }
         } else {
-            this.state = false;
-            onDisable();
+            if(mode != null) {
+                this.state = false;
+                mode.onDisable();
 
-            ClientAPI.getInstance().getEventManager().unregister(this);
+                API.getInstance().getEventManager().unregister(mode);
+            } else {
+                this.state = false;
+                onDisable();
+
+                API.getInstance().getEventManager().unregister(this);
+            }
         }
+    }
+
+    public List<Mode> getModes() {
+        return modes;
+    }
+
+    public void addMode(Mode mode) {
+        this.mode = mode;
+
+        modes.add(mode);
+    }
+
+    public void removeMode(Mode mode) {
+        this.mode = null;
+
+        modes.remove(mode);
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public Mode getMode(Mode mode) {
+        return mode;
     }
 
     public String getName() {

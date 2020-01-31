@@ -1,5 +1,7 @@
 package cc.foaler.api.command;
 
+import cc.foaler.api.module.ModuleInfo;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +16,9 @@ public class CommandManager {
     }
 
     public void addCommand(Command command) {
-        commands.add(command);
+        if(command.getClass().isAnnotationPresent(ModuleInfo.class)) {
+            commands.add(command);
+        }
     }
 
     public void removeCommand(Command command) {

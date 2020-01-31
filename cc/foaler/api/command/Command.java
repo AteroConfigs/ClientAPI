@@ -1,24 +1,21 @@
 package cc.foaler.api.command;
 
 import java.io.Serializable;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public abstract class Command {
 
-    private String name;
-    private String description;
-    private String[] alias;
+    private String name = getClass().getAnnotation(CommandInfo.class).name();
+    private String description = getClass().getAnnotation(CommandInfo.class).description();
+    private String[] alias = getClass().getAnnotation(CommandInfo.class).alias();
 
     private List<Serializable> names;
 
-    public Command(String name, String description, String... alias) {
-        this.name = name;
-        this.description = description;
-        this.alias = alias;
-        this.names = new ArrayList<>();
-
+    public Command() {
         names.addAll(Arrays.asList(name, alias));
     }
 

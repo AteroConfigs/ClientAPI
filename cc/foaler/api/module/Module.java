@@ -7,22 +7,19 @@ import java.util.List;
 
 public abstract class Module {
 
-    private String name;
-    private String description;
-    private Category category;
-    private int bind;
-    private boolean show;
+    private String name = getClass().getAnnotation(ModuleInfo.class).name();
+    private String description = getClass().getAnnotation(ModuleInfo.class).description();
+    private Category category = getClass().getAnnotation(ModuleInfo.class).category();
+    private int bind = getClass().getAnnotation(ModuleInfo.class).bind();
+    private boolean show = getClass().getAnnotation(ModuleInfo.class).show();
 
     private boolean state;
+
     public Mode mode;
     private List<Mode> modes = new ArrayList<>();
 
-    public Module(String name, String description, Category category, int bind, boolean show) {
-        this.name = name;
-        this.description = description;
-        this.category = category;
-        this.bind = bind;
-        this.show = show;
+    public Module() {
+
     }
 
     public void toggle() {
@@ -46,29 +43,31 @@ public abstract class Module {
     }
 
     public void setEnabled(boolean state) {
-        if(state) {
-            if(mode != null) {
-                this.state = true;
-                mode.onEnable();
+        if(getClass().isAnnotationPresent(ModuleInfo.class)) {
+            if(state) {
+                if(mode != null) {
+                    this.state = true;
+                    mode.onEnable();
 
-                API.getInstance().getEventManager().register(mode);
+                    API.getInstance().getEventManager().register(mode);
+                } else {
+                    this.state = true;
+                    onEnable();
+
+                    API.getInstance().getEventManager().register(this);
+                }
             } else {
-                this.state = true;
-                onEnable();
+                if(mode != null) {
+                    this.state = false;
+                    mode.onDisable();
 
-                API.getInstance().getEventManager().register(this);
-            }
-        } else {
-            if(mode != null) {
-                this.state = false;
-                mode.onDisable();
+                    API.getInstance().getEventManager().unregister(mode);
+                } else {
+                    this.state = false;
+                    onDisable();
 
-                API.getInstance().getEventManager().unregister(mode);
-            } else {
-                this.state = false;
-                onDisable();
-
-                API.getInstance().getEventManager().unregister(this);
+                    API.getInstance().getEventManager().unregister(this);
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import cc.foaler.api.event.Event;
 import cc.foaler.api.event.EventManager;
 import cc.foaler.api.module.ModuleManager;
 import cc.foaler.api.utils.Client;
+import cc.foaler.api.utils.LogHelper;
 
 public class API {
 

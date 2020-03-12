@@ -1,6 +1,6 @@
 package cc.foaler.api.event;
 
-import cc.foaler.api.API;
+import cc.foaler.api.Client;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -24,7 +24,7 @@ public abstract class Event {
     }
 
     private static void call(Event event) {
-        ArrayHelper<Data> dataList = API.getInstance().getEventManager().get(event.getClass());
+        ArrayHelper<Data> dataList = Client.getInstance().getEventManager().get(event.getClass());
         if (dataList != null) {
             for (Data data : dataList) {
                 try {

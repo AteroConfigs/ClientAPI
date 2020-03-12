@@ -1,17 +1,19 @@
 package cc.foaler.api.module;
 
-import cc.foaler.api.API;
+import cc.foaler.api.Client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Module {
 
-    private String name = getClass().getAnnotation(ModuleInfo.class).name();
-    private String description = getClass().getAnnotation(ModuleInfo.class).description();
-    private Category category = getClass().getAnnotation(ModuleInfo.class).category();
-    private int bind = getClass().getAnnotation(ModuleInfo.class).bind();
-    private boolean show = getClass().getAnnotation(ModuleInfo.class).show();
+    private ModuleInfo moduleInfo = getClass().getAnnotation(ModuleInfo.class);
+
+    private String name;
+    private String description;
+    private Category category;
+    private int bind;
+    private boolean show;
 
     private boolean state;
 
@@ -19,7 +21,11 @@ public abstract class Module {
     private List<Mode> modes = new ArrayList<>();
 
     public Module() {
-
+        name = moduleInfo.name();
+        description = moduleInfo.description();
+        category = moduleInfo.category();
+        bind = moduleInfo.bind();
+        show = moduleInfo.show();
     }
 
     public void toggle() {
@@ -49,24 +55,24 @@ public abstract class Module {
                     this.state = true;
                     mode.onEnable();
 
-                    API.getInstance().getEventManager().register(mode);
+                    Client.getInstance().getEventManager().register(mode);
                 } else {
                     this.state = true;
                     onEnable();
 
-                    API.getInstance().getEventManager().register(this);
+                    Client.getInstance().getEventManager().register(this);
                 }
             } else {
                 if(mode != null) {
                     this.state = false;
                     mode.onDisable();
 
-                    API.getInstance().getEventManager().unregister(mode);
+                    Client.getInstance().getEventManager().unregister(mode);
                 } else {
                     this.state = false;
                     onDisable();
 
-                    API.getInstance().getEventManager().unregister(this);
+                    Client.getInstance().getEventManager().unregister(this);
                 }
             }
         }

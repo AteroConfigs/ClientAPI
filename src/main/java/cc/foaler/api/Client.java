@@ -1,12 +1,22 @@
 package cc.foaler.api;
 
+import cc.foaler.api.command.Command;
 import cc.foaler.api.command.CommandManager;
 import cc.foaler.api.event.EventManager;
+import cc.foaler.api.module.Module;
 import cc.foaler.api.module.ModuleManager;
+import cc.foaler.api.utils.ClassScanner;
+import cc.foaler.api.utils.Init;
+import one.util.streamex.StreamEx;
 
-public class API {
+import java.util.Comparator;
 
-    private static API instance = new API();
+public class Client {
+
+    private static Client instance = new Client();
+
+    private String name;
+    private double version;
 
     private EventManager eventManager;
     private CommandManager commandManager;
@@ -22,10 +32,6 @@ public class API {
 
     public void unregister() {
         eventManager.unregister(this);
-    }
-
-    public static void setInstance(API instance) {
-        API.instance = instance;
     }
 
     public EventManager getEventManager() {
@@ -52,7 +58,23 @@ public class API {
         this.moduleManager = moduleManager;
     }
 
-    public static API getInstance() {
+    public String getName() {
+        return name;
+    }
+
+    public double getVersion() {
+        return version;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setVersion(double version) {
+        this.version = version;
+    }
+
+    public static Client getInstance() {
         return instance;
     }
 }

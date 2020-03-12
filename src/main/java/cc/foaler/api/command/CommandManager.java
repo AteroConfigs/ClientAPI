@@ -4,6 +4,7 @@ import cc.foaler.api.module.ModuleInfo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,9 +30,9 @@ public class CommandManager {
         return command;
     }
 
-    public Command getCommand(String[] names) {
+    public Command getCommand(String name) {
         for(Command command : commands) {
-            if(command.getNames().get(0).equals(names)) {
+            if(command.getName().equalsIgnoreCase(name) || command.getAlias().equals(Collections.singletonList(name))) {
                 return command;
             }
         }

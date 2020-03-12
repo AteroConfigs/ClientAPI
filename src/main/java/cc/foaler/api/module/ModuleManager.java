@@ -1,8 +1,5 @@
 package cc.foaler.api.module;
 
-import cc.foaler.api.API;
-import cc.foaler.api.event.EventHandler;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -24,6 +21,15 @@ public class ModuleManager {
 
     public Module getModule(Module module) {
         return module;
+    }
+
+    public Module getModule(String name) {
+        for(Module module : modules) {
+            if(module.getName().equalsIgnoreCase(name)) {
+                return module;
+            }
+        }
+        return null;
     }
 
     public List<Module> getModules() {
